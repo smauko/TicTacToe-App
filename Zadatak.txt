@@ -1,0 +1,227 @@
+
+1.
+To znači da bi prvo trebala preuzeti sve potrebne programe te malo proučiti React.js.
+ 
+Tako da zasad preuzmi i instaliraj:
+-Spring Tool Suite 4
+-Visual Studio Code
+-Postman
+-Tortoise Git
+-Node.js(64-bit Installer: https://nodejs.org/en/blog/release/v16.10.0 )
+ 
+Onda otvori Cmd i pogledaj je li ti node verziju učitava sa komandom: node -v
+ 
+Ako ti javi 16.10.0 znači da je sve uredu i onda pokreni komandu: npm install --global yarn
+ 
+I mislim da bi to trebalo biti to zasad pa ćeš malo pogledat službenu literaturu i tutorial 
+React-a. 
+- https://react.dev/learn
+- https://react.dev/learn/tutorial-tic-tac-toe
+ 
+Da bi mogla najbolje to testirat trebala bi kreirati novi React aplikaciju.
+1) Napravi si negdje folder TestApp ili nešto slično
+2) Otvori taj folder u Visual Studio Code-u i otvori novi terminal (Terminal >> New Terminal)
+3) Pokreni Yarn komandu: yarn create react-app testApp
+4) Upiši komandu: cd testApp kako bi ušla u terminalu u svoj folder aplikacije 
+5) Pokreni komandu: yarn start
+ 
+Ako ti ovo ne bude radilo trebat ćeš u file explorer-u otvoriti svoj folder i gore gdje ti 
+piše > This PC > DATA (D:) > ... > TestApp samo stisni i napiši cmd i otvorit će ti command 
+prompt isto kao i u terminalu i napiši 3, 4 i 5 tamo.
+ 
+Ako negdje zapneš u tim koracima najbolje pitaj Ivana.
+ 
+Kad to pokreneš trebala bi ti se otvorit aplikacija u chrome ili Firefox 
+ili negdje tako i sve šta budeš mjenjala u Visual Studio Code kad spremiš će bit 
+vidljivo odmah na ekranu.
+
+2.
+
+Kada završiš sa ovim zadacima napravi novi projekt u novom folderu sve po uputama 
+kao i za prvi i u njemu pokušaj napraviti igricu križić kružić.
+ 
+Dodaj paket antd pomoću yarn komande: yarn add antd. Nju ćeš koristiti za vizualne elemente u 
+igrici i formama pa malo pogledaj na njihovoj stranici komponente koje imaju pa se upoznaj sa 
+njima.
+
+Logika će ostati ista samo ćeš koristiti antd gumbe i slično.
+ 
+Pokušaj što manje gledati u ovo što si dosad radila.
+ 
+Kada napraviš osnovnu igricu dodaj paket react-toastify. 
+ On služi za prikaz povratnih informacija i obavijesti na ekranu.
+Yarn komanda: yarn add react-toastify
+ 
+Dodaj da se ispiše "Pobjedio je X", "Pobjedio je O" ili "Izjednačeno!" ovisno o ishodu igre.
+
+Import, export, cont + arrow funkcije
+
+3.
+
+
+Kada to napraviš, napravi da se prije igranja mora unest ime za igrača X i igrača O.
+ 
+Neka onda za vrijeme igre piše da je na potezu ime, a ne X ili O i neka na kraju 
+pobjenika u obavijesti nazove imenom, a ne kružić ili križić.
+ 
+Poslije toga prouči antd komponentu Table i pomoću nje prikaži sve igre koje 
+su se igrale sa stupcima: Igrač X, Igrač O, Ishod, Vrijeme.
+ 
+Da bi to mogla, najbolje bi bilo da kreiraš polje JSON objekata koje bi 
+izgledalo otprilike ovako:
+
+List Of Winners
+ 
+JavaScript
+[
+	{
+		playerX: ...,
+		playerO: ...,
+		time: dd/MM/yyyy hh:mm:ss,
+		winner: (X/O/Draw)
+	},
+	{
+		playerX: ...,
+		playerO: ...,
+		time: dd/MM/yyyy hh:mm:ss,
+		winner: (X/O/Draw)
+	}, ...
+]
+4.
+
+Ajde sad napravi da se polja za unos imena moraju validirat i da jedino može 
+započet igra ako oba imena imaju minimalno 4 i maksimalno 15 znakova
+ 
+I da se tablica može sortirat.
+
+5.
+Sad kada si napravila igru i tablicu pobjednika napravi da se u funkciji App ništa ne nalazi.
+ 
+Sve prebaci u druge datoteke pa da se u App samo import-a TicTacToePage ili kako si već 
+nazvala svoju komponentu koja sadrži sve do sad rađeno.
+ 
+Druga stvar je da dodaš paket react-router-dom pomoću komande yarn add react-router-dom. 
+Taj paket se koristi da napraviš različite stranice na svojoj aplikaciji.
+ 
+Pomoću <BrowserRouter> dodaj <Routes> i <Route> na sljedeći način:
+ 
+BrowserRouter
+ 
+JavaScript
+<BrowserRouter>
+    <Layout>
+        <Routes>
+            <Route path="/" element={<TicTacToePage saveDataFunction={ data => setData(data)}/>} />
+            <Route path="/results" element={<ResultsPage data={data}/>} />
+        </Routes>
+    </Layout>
+</BrowserRouter>
+Collapse
+Na taj način na svojoj aplikaciji ako otvoriš localhost:3000/ 
+će se otvoriti igra a na localhost:3000/results tablica sa rezultatima.
+ 
+Prvo, pomoću Top Navigation primjera na https://ant.design/components/menu iskoristi 
+komponentu <Menu> kako bi napravila navigaciju potrebno je koristiti useNavigate() 
+na sljedeći način.
+ 
+U svoju Layout komponentu dodaj const navigate = useNavigate(); dodaj onClick metodu u 
+Menu na sljedeći način:
+ 
+Layout
+ 
+JavaScript
+export const Layout = ({ children }) => {
+    const navigate = useNavigate();
+
+    return (
+      <div>
+        <Menu
+            defaultSelectedKeys={[window.location.pathname]}
+            onClick={({ key }) => navigate(key)}
+            items={menuItems}
+        />
+        {children}
+        </div>  
+        );
+};
+Collapse
+Dok ćeš u menuItems izgleda (potrebno je dodati i paket @ant-design/icons, vidi kako):
+
+MenuItems
+ 
+JavaScript
+export const menuItems = [
+    { label: "Tic Tac Toe", key: "/", icon: <PlayCircleOutlined /> },
+    { label: "Results", key: "results", icon: <CalendarOutlined /> },
+];
+Drugo, napravi samo da to radi i da se kad se otvori igrica da se može normalno 
+odigrat, a onda budeš napravila da se rezultati proslijedi na drugu stranicu.
+ 
+Da bi to mogla u svoju TicTacToePage u parametre na početku moraš dodati saveDataFunction 
+koju bi mu proslijedila kako je pokazano na gornjem isječku koda. App.js jedino će 
+sadržavati const [data, setData] = useState([]) kako bi se podaci mogli spremiti i 
+koristiti na drugoj stranici.
+
+6.
+Sljedeći zadatak je da napravi backend dio svoje aplikacije.
+ 
+Da bi to mogla pomoću Spring Tool Suite-a kreiraj novi Spring Boot 
+maven projekt i u njemu napravi NameValidationController.
+ 
+On bi trebao imati anotaciju @RestController te bi trebao sadržavati metode 
+koje imaju Get ili Post Mapping kako bi se na njih moglo pristupiti.
+ 
+Tvoj zadatak je prebaciti validaciju imena na backend tako da se na nju pristupa pomoću 
+/validation/playerNameCheck i on vraća true ako su imena ispravna i 
+false ako nisu. /validation neka bude na razini klase a /playerNameCheck na razini metode.
+ 
+Osim validacije koju si do sad već imala, napravi da i ime ne smije sadržavati brojeve 
+nego samo slova.
+ 
+Frontend bi trebao onda na klik gumba samo pozvati backend koji odradi validaciju i 
+ako je sve oke ispisat poruku i započet igru, a ako ne, trebao bi ispisati grešku je 
+li problem duljina ili broj u imenu ili oboje.
+ 
+Prije provjere na frontend-u testiraj pomoću postman aplikacije svoju metodu i 
+pošalji mi sliku ekrana da vidim jedan dobar i jedan loš poziv.
+
+7.
+[Yesterday 07:23] Bruno Brnić
+Kada zavšiš s ovim potrebno je malo poraditi na strukturi projekta.
+ 
+Prva stvar je da na glavnom paketu napraviš new package koji će bit .controllers 
+i u njega prebaciš sve postojeće kontrolere.
+ 
+Drugo je da napraviš paket .service i u njemu paket .impl.
+ 
+Oni će ti služit za kreiranje logike na backend-u. Controller bi trebao biti samo 
+mapping dio koji onda poziva određenu metodu service-a i vraća rezultat. Tako će ti 
+kod biti čitljiviji i znat ćeš lakše di je šta. U većini slučajeva će biti koliko je 
+controller-a toliko je i service interface-a te service.impl klasa.
+ 
+Napravi ValidationService interface koji će imati u sebi metodu validateName(String name). 
+Onda u service.impl napraviš Java klasu koja se zove ValidationServiceImpl klasu koja će 
+implementirati taj interface i tu raspišeš tu metodu.
+ 
+Zatim u ValidationController napraviš varijablu ValidationService-a koja ima anotaciju 
+@Autowired i pomoću nje pozivaš metodu.
+ 
+Kada to napraviš istu stvar napravi i sa provjerom pobjednika. Kreiraj novi service i novi 
+serviceImpl i njih pozovi. Kod tog drugog dijela napravi da nije da ti javi ima ili nema 
+pobjednika, nego da ti objekt koji će ti imati dve informacije. Prva je status koja će 
+vratiti: "X" ako je X pobjedio, "O", "Izjednačeno" ili "In Progress" koji će vratiti ako 
+nema pobjednika. Druga informacija je ako ti vrati "X" ili "O" da vrati i polja koja kreiraju 
+pobjednički niz. Npr ako je dijagonala, to su ili id 1, 5, 9 ili su to 
+polja [0][0], [1][1], [2][2] ovisno o načinu na koji si imlementirala.
+ 
+Kada dobiješ tu informaciju na frontend-u, označi bojom koji je pobjednički niz.
+ like 1
+ 
+
+https://www.geeksforgeeks.org/interfaces-in-java/
+ 
+https://www.geeksforgeeks.org/dependency-injection-di-design-pattern/
+
+Tu je neka mala dokumentacija ako se prije nisi susrela sa interface-ima i ovim konceptom
+ 
+ 
